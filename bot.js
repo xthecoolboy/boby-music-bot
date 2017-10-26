@@ -57,7 +57,7 @@ client.on('message', function(message) {
                         if (err) throw new Error(err);
                         guilds[message.guild.id].queueNames.push(videoInfo.title);
                         message.channel.send("Now playing **" + videoInfo.title + "**");
-                        client.user.setGame(videoInfo.title);
+                        client.user.setGame(guilds[message.guild.id].queueNames[0]);
                     });
                 });
             }
