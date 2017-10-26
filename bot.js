@@ -98,7 +98,7 @@ client.on('message', function(message) {
 
 client.on('ready', function() {
     console.log("Online and ready to party!");
-    client.user.setGame("some hot beats!")
+    client.user.setGame("nothing right now!");
 });
 
 function skip_song(message) {
@@ -123,10 +123,12 @@ function playMusic(id, message) {
             guilds[message.guild.id].skippers = [];
             guilds[message.guild.id].queue.shift();
             guilds[message.guild.id].queueNames.shift();
+            client.user.setGame(queueNames[0])
             if (guilds[message.guild.id].queue.length === 0) {
                 guilds[message.guild.id].queue = [];
                 guilds[message.guild.id].queueNames = [];
                 guilds[message.guild.id].isPlaying = false;
+                client.user.setGame("nothing right now!");
             } else {
                 setTimeout(function() {
                     playMusic(guilds[message.guild.id].queue[0], message);
