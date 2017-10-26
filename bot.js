@@ -21,7 +21,7 @@ client.on('message', function(message) {
     const args = message.content.split(' ').slice(1).join(" ");
 
     if (args.includes("http") || args.includes("www")) {
-        message.channel.send("URLs are not supported sorry!");
+        message.channel.send(":sos: URLs are not supported sorry!");
         return;
     }
 
@@ -44,7 +44,7 @@ client.on('message', function(message) {
                     add_to_queue(id, message);
                     fetchVideoInfo(id, function(err, videoInfo) {
                         if (err) throw new Error(err);
-                        message.channel.send("Added **" + videoInfo.title + "** to the queue");
+                        message.channel.send(":arrow_heading_down: Added **" + videoInfo.title + "** to the queue");
                         guilds[message.guild.id].queueNames.push(videoInfo.title);
                     });
                 });
@@ -56,7 +56,7 @@ client.on('message', function(message) {
                     fetchVideoInfo(id, function(err, videoInfo) {
                         if (err) throw new Error(err);
                         guilds[message.guild.id].queueNames.push(videoInfo.title);
-                        message.channel.send("Now playing **" + videoInfo.title + "**");
+                        message.channel.send(":arrow_forward: Now playing **" + videoInfo.title + "**");
                         client.user.setGame(guilds[message.guild.id].queueNames[0]);
                     });
                 });
@@ -70,12 +70,12 @@ client.on('message', function(message) {
             guilds[message.guild.id].skipReq++;
             if (guilds[message.guild.id].skipReq >= Math.ceil((guilds[message.guild.id].voiceChannel.members.size - 1) / 2)) {
                 skip_song(message);
-                message.reply(" your skip has been counted for, Skipping to next song now");
+                message.channel.send(":fast_forward: " + message.author + "your skip has been counted for, Skipping to next song now");
             } else {
-                message.reply(" your skip has been counted for, You need **" + (Math.ceil((guilds[message.guild.id].voiceChannel.members.size - 1) / 2) - guilds[message.guild.id].skipReq) + "**  more votes to skip");
+                message.channel.send(":fast_forward: " + message.author + "your skip has been counted for, You need **" + (Math.ceil((guilds[message.guild.id].voiceChannel.members.size - 1) / 2) - guilds[message.guild.id].skipReq) + "**  more votes to skip");
             }
         } else {
-            message.reply(" your vote had been counted already");
+            message.channel.send(":sos: " + message.author + "your vote had been counted already");
         }
     } else if (mess.startsWith(prefix + "queue")) {
         var message2 = "```";
