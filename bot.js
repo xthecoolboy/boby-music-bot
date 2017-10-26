@@ -124,7 +124,7 @@ function playMusic(id, message) {
             guilds[message.guild.id].skippers = [];
             guilds[message.guild.id].queue.shift();
             guilds[message.guild.id].queueNames.shift();
-            client.user.setGame(queueNames[0])
+            client.user.setGame(guilds[message.guild.id].queueNames[0])
             if (guilds[message.guild.id].queue.length === 0) {
                 guilds[message.guild.id].queue = [];
                 guilds[message.guild.id].queueNames = [];
