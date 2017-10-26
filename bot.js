@@ -71,7 +71,7 @@ client.on('message', function(message) {
                 skip_song(message);
                 message.reply(" your skip has been counted for, Skipping to next song now");
             } else {
-                message.reply(" your skip has been counted for, You need **" + Math.ceil((guilds[message.guild.id].voiceChannel.members.size - 1) / 2) - guilds[message.guild.id].skipReq) = "**  more votes to skip";
+                message.reply(" your skip has been counted for, You need **" + (Math.ceil((guilds[message.guild.id].voiceChannel.members.size - 1) / 2) - guilds[message.guild.id].skipReq) = "**  more votes to skip";
             }
         } else {
             message.reply(" your vote had been counted already");
