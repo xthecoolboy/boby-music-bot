@@ -99,7 +99,7 @@ client.on('message', function(message) {
 
 client.on('ready', function() {
     console.log("Online and ready to party!");
-    client.user.setGame("nothing right now!");
+    client.user.setGame("nothing right now");
 });
 
 function skip_song(message) {
@@ -129,7 +129,7 @@ function playMusic(id, message) {
                 guilds[message.guild.id].queue = [];
                 guilds[message.guild.id].queueNames = [];
                 guilds[message.guild.id].isPlaying = false;
-                client.user.setGame("nothing right now!");
+                client.user.setGame("nothing right now");
             } else {
                 setTimeout(function() {
                     playMusic(guilds[message.guild.id].queue[0], message);
