@@ -59,7 +59,6 @@ client.on('message', function(message) {
                         if (err) throw new Error(err);
                         guilds[message.guild.id].queueNames.push(videoInfo.title);
                         message.channel.send(":arrow_forward: Now playing **" + videoInfo.title + "**");
-                        client.user.setGame(guilds[message.guild.id].queueNames[0]);
                     });
                 });
             }
@@ -101,7 +100,7 @@ client.on('message', function(message) {
 
 client.on('ready', function() {
     console.log("Online and ready to party!");
-    client.user.setGame("nothing right now");
+    client.user.setGame("some hot tunes!");
 });
 
 function skip_song(message) {
@@ -126,12 +125,10 @@ function playMusic(id, message) {
             guilds[message.guild.id].skippers = [];
             guilds[message.guild.id].queue.shift();
             guilds[message.guild.id].queueNames.shift();
-            client.user.setGame(guilds[message.guild.id].queueNames[0])
             if (guilds[message.guild.id].queue.length === 0) {
                 guilds[message.guild.id].queue = [];
                 guilds[message.guild.id].queueNames = [];
                 guilds[message.guild.id].isPlaying = false;
-                client.user.setGame("nothing right now");
             } else {
                 setTimeout(function() {
                     playMusic(guilds[message.guild.id].queue[0], message);
