@@ -71,12 +71,12 @@ client.on('message', function(message) {
             guilds[message.guild.id].skipReq++;
             if (guilds[message.guild.id].skipReq >= Math.ceil((guilds[message.guild.id].voiceChannel.members.size - 1) / 2)) {
                 skip_song(message);
-                message.channel.send(":fast_forward: " + message.author + "your skip has been counted for, Skipping to next song now");
+                message.channel.send(":fast_forward: " + message.author + " your skip has been counted for, Skipping to next song now");
             } else {
-                message.channel.send(":fast_forward: " + message.author + "your skip has been counted for, You need **" + (Math.ceil((guilds[message.guild.id].voiceChannel.members.size - 1) / 2) - guilds[message.guild.id].skipReq) + "**  more votes to skip");
+                message.channel.send(":fast_forward: " + message.author + " your skip has been counted for, You need **" + (Math.ceil((guilds[message.guild.id].voiceChannel.members.size - 1) / 2) - guilds[message.guild.id].skipReq) + "**  more votes to skip");
             }
         } else {
-            message.channel.send(":sos: " + message.author + "your vote had been counted already");
+            message.channel.send(":sos: " + message.author + " your skip has been counted already");
         }
     } else if (mess.startsWith(prefix + "queue")) {
         var message2 = "```";
