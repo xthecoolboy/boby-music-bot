@@ -19,6 +19,8 @@ client.on('message', function(message) {
     const member = message.member;
     const mess = message.content.toLowerCase();
     const args = message.content.split(' ').slice(1).join(" ");
+    
+    if (message.author.bot) return;
 
     if (args.includes("http") || args.includes("www")) {
         message.channel.send(":sos: URLs are not supported sorry!");
