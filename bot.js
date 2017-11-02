@@ -85,7 +85,7 @@ client.on('message', function(message) {
         }
 
         var info = ":musical_note: Song Queue for **" + message.guild.name + " " + message.guild.voiceConnection.channel.name + "**";
-        var playing = ":play_pause: Currently Playing **" + guilds[message.guild.id].queueNames[0] + "**, Coming up next:";
+        var playing = ":play_pause: Currently Playing **" + guilds[message.guild.id].queueNames[0] + "**";
 
         message.channel.send(info);
         message.channel.send(playing);
