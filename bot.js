@@ -79,21 +79,33 @@ client.on('message', function(message) {
             message.channel.send(":sos: " + message.author + " your skip has been counted already");
         }
     } else if (mess.startsWith(prefix + "queue")) {
-        var message2 = "```";
-        for (var i = 0; i < guilds[message.guild.id].queueNames.length; i++) {
-            var temp = (i + 1) + ": " + guilds[message.guild.id].queueNames[i] + (i === 0 ? "**(Current Song)**" : "") + "\n";
-            if ((message2 + temp).length <= 2000 - 3) {
-                message2 += temp;
-            } else {
-                message2 += "```";
-                message.channel.send(message2);
-                message2 = "```";
-            }
+        if (guilds[message.guild.id].queueNames.length == 0) {
+            message.channel.send(":sos: Nothing is playing right now");
+            return;
         }
-        message2 += "```";
-        message.channel.send(message2);
-    }
 
+        var info = ":musical_note: Song Queue for **" + message.guild.name + " " + message.guild.voiceConnection.channel.name + "**";
+        var playing = ":play_pause: Currently Playing **" + guilds[message.guild.id].queueNames[0] + "**, Coming up next:";
+
+        message.channel.send(info);
+        message.channel.send(playing);
+
+        if (guilds[message.guild.id].queueNames.length == 1) {
+            message.channel.send("Queue is empty :cry:");
+            return;
+        }
+
+        var message = "";
+
+        for (var i = 0; i < guilds[message.guild.id].queueNames.length; i++) {
+            if (i == 0) {
+                var i = 1;
+            }
+            var getqueue = "**" + (i) + "**: " + guilds[message.guild.id].queueNames[i] + "\n";
+            message += getqueue
+        }
+        message.channel.send(message);
+    }
 });
 
 
