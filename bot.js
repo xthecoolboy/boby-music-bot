@@ -95,16 +95,16 @@ client.on('message', function(message) {
             return;
         }
 
-        var message = "";
+        var sendMessage = "";
 
         for (var i = 0; i < guilds[message.guild.id].queueNames.length; i++) {
             if (i == 0) {
                 var i = 1;
             }
             var getqueue = "**" + (i) + "**: " + guilds[message.guild.id].queueNames[i] + "\n";
-            message += getqueue
+            sendMessage += getqueue;
         }
-        message.channel.send(message);
+        message.channel.send(sendMessage);
     }
 });
 
