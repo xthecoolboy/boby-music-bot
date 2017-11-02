@@ -91,11 +91,11 @@ client.on('message', function(message) {
         message.channel.send(playing);
 
         if (guilds[message.guild.id].queueNames.length == 1) {
-            message.channel.send("Queue is empty :cry:");
+            message.channel.send(":notepad_spiral: Queue is empty :cry:");
             return;
         }
 
-        var sendMessage = "";
+        var sendMessage = ":notepad_spiral: Next in Queue \n";
 
         for (var i = 0; i < guilds[message.guild.id].queueNames.length; i++) {
             if (i == 0) {
