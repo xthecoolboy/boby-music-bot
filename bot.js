@@ -34,6 +34,7 @@ client.on('message', function (message) {
             queue: [],
             queueNames: [],
             queueTimes: [],
+            queueAdders: [],
             isPlaying: false,
             dispatcher: null,
             voiceChannel: null,
@@ -51,6 +52,7 @@ client.on('message', function (message) {
                         if (err) throw new Error(err);
                         guilds[message.guild.id].queueNames.push(videoInfo.title);
                         guilds[message.guild.id].queueTimes.push(videoInfo.duration);
+                        guilds[message.guild.id].queueAdders.push(message.author.tag);
                         message.channel.send(":arrow_heading_down: Added **" + videoInfo.title + "** `" + moment.duration(videoInfo.duration, "seconds").format('hh:mm:ss') + "` to the queue");
                     });
                 });
@@ -63,12 +65,13 @@ client.on('message', function (message) {
                         if (err) throw new Error(err);
                         guilds[message.guild.id].queueNames.push(videoInfo.title);
                         guilds[message.guild.id].queueTimes.push(videoInfo.duration);
+                        guilds[message.guild.id].queueAdders.push(message.author.tag);
                         message.channel.send(":arrow_forward: Now playing **" + videoInfo.title + "** `" + moment.duration(videoInfo.duration, "seconds").format('hh:mm:ss') + "`");
                     });
                 });
             }
         } else {
-            message.channel.send("You dont seem to be in a voice channel");
+            message.channel.send(":sos: You dont seem to be in a voice channel");
         }
     } else if (mess.startsWith(prefix + "skip")) {
         if (guilds[message.guild.id].skippers.indexOf(message.author.id) === -1) {
@@ -90,7 +93,7 @@ client.on('message', function (message) {
         }
 
         var info = ":musical_note: Song Queue for **" + message.guild.name + " " + message.guild.voiceConnection.channel.name + "**\n";
-        var playing = ":play_pause: Currently Playing **" + guilds[message.guild.id].queueNames[0] + "** `" + moment.duration(guilds[message.guild.id].queueTimes[0], "seconds").format('hh:mm:ss') + "`\n";
+        var playing = ":play_pause: Currently Playing **" + guilds[message.guild.id].queueNames[0] + "** `" + moment.duration(guilds[message.guild.id].queueTimes[0], "seconds").format('hh:mm:ss') + "` added by **" + guilds[message.guild.id].queueAdders[0] + "**\n";
         var sendMessage = "";
 
         if (guilds[message.guild.id].queueNames.length == 1) {
@@ -109,7 +112,7 @@ client.on('message', function (message) {
             if (i == 0) {
                 var i = 1;
             }
-            var getqueue = "**" + (i) + "**: " + guilds[message.guild.id].queueNames[i] + " `" +  moment.duration(guilds[message.guild.id].queueTimes[i], "seconds").format('hh:mm:ss') + "`\n";
+            var getqueue = "**" + (i) + "**: **" + guilds[message.guild.id].queueNames[i] + "** `" +  moment.duration(guilds[message.guild.id].queueTimes[i], "seconds").format('hh:mm:ss') + "` added by **" + guilds[message.guild.id].queueAdders[i] +"**\n";
             sendMessage += getqueue;
         }
         message.channel.send(sendMessage);
@@ -127,16 +130,12 @@ function skip_song(message) {
 
 function playMusic(id, message) {
     guilds[message.guild.id].voiceChannel = message.member.voiceChannel;
-
-
-
     guilds[message.guild.id].voiceChannel.join().then(function (connection) {
         stream = ytdl("https://www.youtube.com/watch?v=" + id, {
             filter: 'audioonly'
         });
         guilds[message.guild.id].skipReq = 0;
         guilds[message.guild.id].skippers = [];
-
         guilds[message.guild.id].dispatcher = connection.playStream(stream);
         guilds[message.guild.id].dispatcher.on('end', function () {
             guilds[message.guild.id].skipReq = 0;
@@ -144,9 +143,12 @@ function playMusic(id, message) {
             guilds[message.guild.id].queue.shift();
             guilds[message.guild.id].queueNames.shift();
             guilds[message.guild.id].queueTimes.shift();
+            guilds[message.guild.id].queueAdders.shift();
             if (guilds[message.guild.id].queue.length === 0) {
                 guilds[message.guild.id].queue = [];
                 guilds[message.guild.id].queueNames = [];
+                guilds[message.guild.id].queueTimes = [];
+                guilds[message.guild.id].queueAdders = [];
                 guilds[message.guild.id].isPlaying = false;
             } else {
                 setTimeout(function () {
