@@ -24,11 +24,6 @@ client.on('message', function (message) {
 
     if (message.author.bot) return;
 
-    if (args.includes("http") || args.includes("www")) {
-        message.channel.send(":sos: URLs are not supported sorry!");
-        return;
-    }
-
     if (!guilds[message.guild.id]) {
         guilds[message.guild.id] = {
             queue: [],
@@ -44,6 +39,10 @@ client.on('message', function (message) {
     }
 
     if (mess.startsWith(prefix + "play")) {
+        if (args.includes("http") || args.includes("www")) {
+            message.channel.send(":sos: URLs are not supported sorry!");
+            return;
+        }
         if (message.member.voiceChannel || guilds[message.guild.id].voiceChannel != null) {
             if (guilds[message.guild.id].queue.length > 0 || guilds[message.guild.id].isPlaying) {
                 getID(args, function (id) {
