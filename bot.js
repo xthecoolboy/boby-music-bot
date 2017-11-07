@@ -22,6 +22,10 @@ client.on('message', function (message) {
     const mess = message.content.toLowerCase();
     const args = message.content.split(' ').slice(1).join(" ");
 
+    if (message.author.id == client.user.id) {
+        setTimeout(() => message.delete(), 10000);
+    }
+
     if (message.author.bot) return;
 
     if (!guilds[message.guild.id]) {
@@ -39,6 +43,7 @@ client.on('message', function (message) {
     }
 
     if (mess.startsWith(prefix + "play")) {
+        message.delete().catch(O_o => { });
         if (args.includes("http") || args.includes("www")) {
             message.channel.send(":sos: URLs are not supported sorry!");
             return;
@@ -73,6 +78,7 @@ client.on('message', function (message) {
             message.channel.send(":sos: You dont seem to be in a voice channel");
         }
     } else if (mess.startsWith(prefix + "skip")) {
+        message.delete().catch(O_o => { });
         if (guilds[message.guild.id].skippers.indexOf(message.author.id) === -1) {
             guilds[message.guild.id].skippers.push(message.author.id);
             guilds[message.guild.id].skipReq++;
@@ -86,26 +92,25 @@ client.on('message', function (message) {
             message.channel.send(":sos: " + message.author + " your skip has been counted already");
         }
     } else if (mess.startsWith(prefix + "queue")) {
+        message.delete().catch(O_o => { });
         if (guilds[message.guild.id].queueNames.length == 0) {
-            message.channel.send(":sos: Nothing is playing right now");
+            message.channel.send(":sos: Nothing has been queued");
             return;
         }
-
-        var info = ":musical_note: Song Queue for **" + message.guild.name + " " + message.guild.voiceConnection.channel.name + "**\n";
-        var playing = ":play_pause: Currently Playing **" + guilds[message.guild.id].queueNames[0] + "** `" + moment.duration(guilds[message.guild.id].queueTimes[0], "seconds").format('hh:mm:ss') + "` added by **" + guilds[message.guild.id].queueAdders[0] + "**\n";
-        var sendMessage = "";
 
         if (guilds[message.guild.id].queueNames.length == 1) {
-            sendMessage += info;
-            sendMessage += playing;
-            sendMessage += ":notepad_spiral: Queue is empty :cry:";
-            message.channel.send(sendMessage);
+            const embed = new Discord.RichEmbed()
+            .setTitle(":musical_note: Song Queue for " + message.guild.name + " " + message.guild.voiceConnection.channel.name)
+            .setAuthor("Queue", client.user.avatarURL)
+            .setColor("#42c2f4")
+            .addField(":play_pause: Currently Playing:", "**" + guilds[message.guild.id].queueNames[0] + "** `" + moment.duration(guilds[message.guild.id].queueTimes[0], "seconds").format('hh:mm:ss') + "` added by **" + guilds[message.guild.id].queueAdders[0] + "**")
+            .addField(":notepad_spiral: Next in Queue:", "Queue is empty :cry:")
+            .setTimestamp();
+            message.channel.send(embed);
             return;
         }
 
-        sendMessage += info;
-        sendMessage += playing;
-        sendMessage += ":notepad_spiral: Next in Queue \n";
+        var sendMessage = "";
 
         for (var i = 0; i < guilds[message.guild.id].queueNames.length; i++) {
             if (i == 0) {
@@ -114,7 +119,33 @@ client.on('message', function (message) {
             var getqueue = "**" + (i) + "**: **" + guilds[message.guild.id].queueNames[i] + "** `" +  moment.duration(guilds[message.guild.id].queueTimes[i], "seconds").format('hh:mm:ss') + "` added by **" + guilds[message.guild.id].queueAdders[i] +"**\n";
             sendMessage += getqueue;
         }
-        message.channel.send(sendMessage);
+        const embed = new Discord.RichEmbed()
+        .setTitle(":musical_note: Song Queue for **" + message.guild.name + " " + message.guild.voiceConnection.channel.name)
+        .setAuthor("Queue", client.user.avatarURL)
+        .setColor("#42c2f4")
+        .addField(":notepad_spiral: Next in Queue", sendMessage)
+        .setTimestamp();
+        message.channel.send(embed);
+    } else if (mess.startsWith(prefix + "np")) {
+        message.delete().catch(O_o => { });
+        if (guilds[message.guild.id].queueNames.length == 0) {
+            message.channel.send(":sos: Nothing is playing right now");
+            return;
+        }
+        fetchVideoInfo(guilds[message.guild.id].queue[0], function (err, videoInfo) {
+            if (err) throw new Error(err);
+            const embed = new Discord.RichEmbed()
+            .setAuthor("Now Playing", client.user.avatarURL)
+            .setColor("#42c2f4")
+            .setThumbnail(videoInfo.thumbnailUrl)
+            .addField(videoInfo.title, "by **" + videoInfo.owner + "**")
+            .addField("Upload Date", videoInfo.datePublished)
+            .addField("Requested By", guilds[message.guild.id].queueAdders[0])
+            .addField("Video Length", moment.duration(guilds[message.guild.id].queueTimes[0], "seconds").format("D [Days,] hh [Hours,] mm [Minutes and] ss [Seconds]"))
+            .addField("Video Link", videoInfo.url)
+            .setTimestamp();
+            message.channel.send(embed);
+        })
     }
 });
 
