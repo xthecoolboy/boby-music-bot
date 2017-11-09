@@ -236,3 +236,4 @@ function search_video(query, callback) {
 
 function isYoutube(str) {
     return str.toLowerCase().indexOf("youtube.com") > -1;
+}
