@@ -156,7 +156,7 @@ client.on('message', function (message) {
             const embed = new Discord.RichEmbed()
                 .setTitle("Bot Info for Boby Music")
                 .setThumbnail(client.user.avatarURL)
-                .setColor(config.embedcolor)
+                .setColor(embedcolor)
                 .addField("Owner", "Bobynoby#8634")
                 .addField("BotID", client.user.id)
                 .addField("Systems Time", Date())
