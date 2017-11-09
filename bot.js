@@ -167,7 +167,7 @@ client.on('message', function (message) {
 });
 
 client.on('ready', function () {
-    console.log("Online and running Boby Music " + version);
+    console.log("Online and running Boby Music");
     client.user.setGame("some hot tunes!");
 });
 
