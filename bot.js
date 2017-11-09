@@ -15,6 +15,7 @@ const discord_token = process.env.BOT_TOKEN;
 const embed_color = process.env.EMBED_COLOR;
 const version = process.env.VERSION;
 
+
 var guilds = {};
 
 client.login(discord_token);
