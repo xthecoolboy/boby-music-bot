@@ -5,13 +5,15 @@ const request = require("request");
 const fs = require("fs");
 const getYoutubeID = require("get-youtube-id");
 const fetchVideoInfo = require("youtube-info");
+const Sysinfo = require("systeminformation");
 const moment = require("moment");
 require("moment-duration-format");
 
 const yt_api_key = process.env.YT_API_KEY;
-const bot_controller = process.env.BOT_CONTROLLER;
 const prefix = process.env.PREFIX;
 const discord_token = process.env.BOT_TOKEN;
+const embed_color = process.env.EMBED_COLOR;
+const version = process.env.VERSION;
 
 var guilds = {};
 
@@ -102,7 +104,7 @@ client.on('message', function (message) {
             const embed = new Discord.RichEmbed()
             .setTitle(":musical_note: Song Queue for " + message.guild.name + " " + message.guild.voiceConnection.channel.name)
             .setAuthor("Queue", client.user.avatarURL)
-            .setColor("#42c2f4")
+            .setColor(embed_color)
             .addField(":play_pause: Currently Playing:", "**" + guilds[message.guild.id].queueNames[0] + "** `" + moment.duration(guilds[message.guild.id].queueTimes[0], "seconds").format('hh:mm:ss') + "` added by **" + guilds[message.guild.id].queueAdders[0] + "**")
             .addField(":notepad_spiral: Next in Queue:", "Queue is empty :cry:")
             .setTimestamp();
@@ -120,9 +122,9 @@ client.on('message', function (message) {
             sendMessage += getqueue;
         }
         const embed = new Discord.RichEmbed()
-        .setTitle(":musical_note: Song Queue for **" + message.guild.name + " " + message.guild.voiceConnection.channel.name)
+        .setTitle(":musical_note: Song Queue for " + message.guild.name + " " + message.guild.voiceConnection.channel.name)
         .setAuthor("Queue", client.user.avatarURL)
-        .setColor("#42c2f4")
+        .setColor(embed_color)
         .addField(":notepad_spiral: Next in Queue", sendMessage)
         .setTimestamp();
         message.channel.send(embed);
@@ -136,7 +138,7 @@ client.on('message', function (message) {
             if (err) throw new Error(err);
             const embed = new Discord.RichEmbed()
             .setAuthor("Now Playing", client.user.avatarURL)
-            .setColor("#42c2f4")
+            .setColor(embed_color)
             .setThumbnail(videoInfo.thumbnailUrl)
             .addField(videoInfo.title, "by **" + videoInfo.owner + "**")
             .addField("Upload Date", videoInfo.datePublished)
@@ -146,11 +148,26 @@ client.on('message', function (message) {
             .setTimestamp();
             message.channel.send(embed);
         })
+    } else if (mess.startsWith(prefix + "botinfo")) {
+        message.delete().catch(O_o => { });
+        Sysinfo.osInfo(function (data) {
+            hostinfo = data.codename + ", " + data.distro + ", " + data.kernel + ", " + data.arch;
+            const embed = new Discord.RichEmbed()
+                .setTitle("Bot Info for Boby Music")
+                .setThumbnail(client.user.avatarURL)
+                .setColor(config.embedcolor)
+                .addField("Owner", "Bobynoby#8634")
+                .addField("BotID", client.user.id)
+                .addField("Systems Time", Date())
+                .addField("System Info", hostinfo)
+                .setTimestamp();
+            message.channel.send({ embed });
+        });
     }
 });
 
 client.on('ready', function () {
-    console.log("Online and ready to party!");
+    console.log("Online and running Boby Music " + version);
     client.user.setGame("some hot tunes!");
 });
 
@@ -219,4 +236,3 @@ function search_video(query, callback) {
 
 function isYoutube(str) {
     return str.toLowerCase().indexOf("youtube.com") > -1;
-}
