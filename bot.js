@@ -105,7 +105,7 @@ client.on('message', function (message) {
             .setTitle(":musical_note: Song Queue for " + message.guild.name + " " + message.guild.voiceConnection.channel.name)
             .setAuthor("Queue", client.user.avatarURL)
             .setColor(embed_color)
-            .addField(":play_pause: Currently Playing:", "**" + guilds[message.guild.id].queueNames[0] + "** `" + moment.duration(guilds[message.guild.id].queueTimes[0], "seconds").format('hh:mm:ss') + "` added by **" + guilds[message.guild.id].queueAdders[0] + "**")
+            .addField(":play_pause: Now Playing (More info with " + prefix + "np) :", "**" + guilds[message.guild.id].queueNames[0] + "** `" + moment.duration(guilds[message.guild.id].queueTimes[0], "seconds").format('hh:mm:ss') + "` added by **" + guilds[message.guild.id].queueAdders[0] + "**")
             .addField(":notepad_spiral: Next in Queue:", "Queue is empty :cry:")
             .setTimestamp();
             message.channel.send(embed);
@@ -125,6 +125,7 @@ client.on('message', function (message) {
         .setTitle(":musical_note: Song Queue for " + message.guild.name + " " + message.guild.voiceConnection.channel.name)
         .setAuthor("Queue", client.user.avatarURL)
         .setColor(embed_color)
+        .addField(":play_pause: Now Playing (More info with " + prefix + "np) :", "**" + guilds[message.guild.id].queueNames[0] + "** `" + moment.duration(guilds[message.guild.id].queueTimes[0], "seconds").format('hh:mm:ss') + "` added by **" + guilds[message.guild.id].queueAdders[0] + "**")
         .addField(":notepad_spiral: Next in Queue", sendMessage)
         .setTimestamp();
         message.channel.send(embed);
