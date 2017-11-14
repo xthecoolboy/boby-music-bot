@@ -14,9 +14,6 @@ const prefix = process.env.PREFIX;
 const discord_token = process.env.BOT_TOKEN;
 const embed_color = process.env.EMBED_COLOR;
 
-
-var guilds = {};
-
 client.login(discord_token);
 
 client.on('message', function (message) {
@@ -46,10 +43,6 @@ client.on('message', function (message) {
 
     if (mess.startsWith(prefix + "play")) {
         message.delete().catch(O_o => { });
-        if (args.includes("http") || args.includes("www")) {
-            message.channel.send(":sos: URLs are not supported sorry!");
-            return;
-        }
         if (message.member.voiceChannel || guilds[message.guild.id].voiceChannel != null) {
             if (guilds[message.guild.id].queue.length > 0 || guilds[message.guild.id].isPlaying) {
                 getID(args, function (id) {
@@ -60,6 +53,7 @@ client.on('message', function (message) {
                         guilds[message.guild.id].queueTimes.push(videoInfo.duration);
                         guilds[message.guild.id].queueAdders.push(message.author.tag);
                         message.channel.send(":arrow_heading_down: Added **" + videoInfo.title + "** `" + moment.duration(videoInfo.duration, "seconds").format('hh:mm:ss') + "` to the queue");
+                        console.log(message.guild.id + " " + message.author.tag + " downloaded " + videoInfo.title + " " + videoInfo.url);
                     });
                 });
             } else {
@@ -73,6 +67,7 @@ client.on('message', function (message) {
                         guilds[message.guild.id].queueTimes.push(videoInfo.duration);
                         guilds[message.guild.id].queueAdders.push(message.author.tag);
                         message.channel.send(":arrow_forward: Now playing **" + videoInfo.title + "** `" + moment.duration(videoInfo.duration, "seconds").format('hh:mm:ss') + "`");
+                        console.log(message.guild.id + " " + message.author.tag + " downloaded " + videoInfo.title + " " + videoInfo.url);
                     });
                 });
             }
@@ -198,7 +193,7 @@ function playMusic(id, message) {
                 guilds[message.guild.id].queueTimes = [];
                 guilds[message.guild.id].queueAdders = [];
                 guilds[message.guild.id].isPlaying = false;
-                guilds[message.guild.id].voiceChannel.leave();
+                guilds[message.guild.id].voiceChannel.leave()
             } else {
                 setTimeout(function () {
                     playMusic(guilds[message.guild.id].queue[0], message);
