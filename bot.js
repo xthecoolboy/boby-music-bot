@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const ytdl = require("ytdl-core");
 const request = require("request");
 const fs = require("fs");
-const getYoutubeID = require("get-youtube-id");
+const getYouTubeID = require("get-youtube-id");
 const fetchVideoInfo = require("youtube-info");
 const Sysinfo = require("systeminformation");
 const moment = require("moment");
@@ -13,6 +13,7 @@ const yt_api_key = process.env.YT_API_KEY;
 const prefix = process.env.PREFIX;
 const discord_token = process.env.BOT_TOKEN;
 const embed_color = process.env.EMBED_COLOR;
+
 var guilds = {};
 
 client.login(discord_token);
@@ -219,7 +220,7 @@ function getID(str, cb) {
     }
 }
 
-function add_to_queue(strID, message) {
+function add_to_queue(strID, message, err) {
     if (isYoutube(strID)) {
         guilds[message.guild.id].queue.push(getYouTubeID(strID));
     } else {
