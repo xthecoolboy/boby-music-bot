@@ -13,6 +13,7 @@ const yt_api_key = process.env.YT_API_KEY;
 const prefix = process.env.PREFIX;
 const discord_token = process.env.BOT_TOKEN;
 const embed_color = process.env.EMBED_COLOR;
+var guilds = {};
 
 client.login(discord_token);
 
