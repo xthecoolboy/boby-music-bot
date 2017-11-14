@@ -205,12 +205,17 @@ function playMusic(id, message) {
 }
 
 function getID(str, cb) {
-    if (isYoutube(str)) {
-        cb(getYouTubeID(str));
-    } else {
-        search_video(str, function (id) {
-            cb(id);
-        });
+    try {
+        if (isYoutube(str)) {
+            cb(getYouTubeID(str));
+        } else {
+            search_video(str, function (id) {
+                cb(id);
+            });
+        }
+    } catch (err) {
+       message.channel.send(":sos: URL cant be used, Try using the share URL instead of the browser URL")
+        return;
     }
 }
 
